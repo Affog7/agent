@@ -8,14 +8,30 @@ class Hostage:
         self.grid = grid
         self.path = []
 
-    def move(self, dx, dy):
-        new_x = self.x + dx
-        new_y = self.y + dy
-        if 0 <= new_x < GRID_SIZE and 0 <= new_y < GRID_SIZE:
-            if self.grid.revealed[new_y][new_x] and self.grid.verified[new_y][new_x]:
-                self.x = new_x
-                self.y = new_y
-                self.path.append((self.x, self.y))
+    def move(self):
+
+        old_x = self.x
+        old_y = self.y
+        
+        if(self.x+1 > GRID_SIZE-1 or self.y+1 > GRID_SIZE-1  ) :
+            return 
+        
+        if self.grid.revealed[self.x+1][self.y] or self.grid.verified[self.x+1][self.y]:
+            print(1)            
+            self.x +=1
+
+        if self.grid.revealed[self.x][self.y+1] or self.grid.verified[self.x][self.y+1]:
+            print(2)            
+            self.y +=1
+
+        if 0 <= self.x < GRID_SIZE and 0 <= self.y < GRID_SIZE:
+            self.path.append((self.x, self.y))
+        else :
+            self.x = old_x
+            self.y = old_x
+
+        
+
 
     def update(self):
         if self.x < GRID_SIZE - 1 and self.grid.revealed[self.y][self.x + 1] and self.grid.verified[self.y][self.x + 1]:

@@ -1,6 +1,7 @@
 import pygame
-import random
-from settings import *
+from agent import Agent
+from settings import CELL_SIZE, GREEN, GRID_SIZE
+
 
 class Demineur:
     def __init__(self, x, y, grid, detector_agent):
@@ -25,19 +26,9 @@ class Demineur:
                     self.y = new_y
         self.move_count += 1
 
-    def reveal_mine(self):
-        if self.grid.grid[self.y][self.x] == -1:
-            self.grid.revealed[self.y][self.x] = True
-            self.grid.flags[self.y][self.x] = True            
-        else:
-            self.grid.verified[self.y][self.x] = True
-
     def update(self):
         self.move()
         self.reveal_mine()
 
     def draw(self, screen):
-        pygame.draw.circle(screen, GREEN, (self.x * CELL_SIZE + CELL_SIZE // 2, self.y * CELL_SIZE + CELL_SIZE // 2), CELL_SIZE // 2)
-
-    def notify(self):
-        return self.x
+        pygame.draw.circle(screen, self.color, (self.x * CELL_SIZE + CELL_SIZE // 2, self.y * CELL_SIZE + CELL_SIZE // 2), CELL_SIZE // 2)
