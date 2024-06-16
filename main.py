@@ -3,7 +3,7 @@ import random
 from detecteur import DetectorAgent
 from settings import *
 from grid import Grid
-from agent import Hostage
+from Hostage import Hostage
 from demineur import Demineur
 
 # Boucle principale du jeu
@@ -46,8 +46,13 @@ while running:
             
     for detector_agent in detector_agents:
         detector_agent.draw(SCREEN)
+   
+    for hostage in hostages:
+        hostage.move()
+
     for hostage in hostages:
         hostage.draw(SCREEN)
+    
     for demineur in demineurs:
         demineur.draw(SCREEN)
 

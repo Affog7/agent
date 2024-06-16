@@ -1,27 +1,20 @@
 import random
 import pygame
+from agent import Agent
 from settings import CELL_SIZE, ORANGE
 
-
-class DetectorAgent:
+class DetectorAgent(Agent):
     def __init__(self, x, y, grid):
-        self.x = x
-        self.y = y
-        self.grid = grid
-        self.radius = 2  # Rayon de détection
-        self.communication_system = []  # Liste pour stocker les positions des mines détectées
-        self.color = ORANGE  # Couleur pour représenter le détecteur
-        self.move_count = 0
-        self.move_interval = 3  # Déplacer le détecteur tous les 3 frames
+        super().__init__(x, y, grid, ORANGE, 3)
+        self.radius = 2
+        self.communication_system = []
 
     def detect_mines(self):
         detected_positions = []
-       
         if self.grid.grid[self.y][self.x] == -1 and not self.grid.revealed[self.y][self.x]:
             detected_positions.append((self.x, self.y, False))
             print(f"position de {self.x}  et {self.y} detectee")
-            self.grid.grid[self.y][self.x] = -2 # marqué la position de -2
-            #self.grid.revealed[self.y][self.x] = True
+            self.grid.grid[self.y][self.x] = -2
         self.grid.verified[self.y][self.x] = True
         return detected_positions
 
@@ -33,7 +26,7 @@ class DetectorAgent:
         return self.communication_system
 
     def move(self):
-        if self.move_count % self.move_interval == 0:  # Déplacer le détecteur à chaque `move_interval` frames
+        if self.move_count % self.move_interval == 0:
             dx, dy = random.choice([(1, 0), (0, 1), (-1, 0), (0, -1)])
             new_x = self.x + dx
             new_y = self.y + dy
@@ -47,7 +40,7 @@ class DetectorAgent:
         self.communicate_mine_positions()
 
     def draw(self, screen):
-        pygame.draw.circle(screen, self.color, (self.x * CELL_SIZE + CELL_SIZE // 2, self.y * CELL_SIZE + CELL_SIZE // 2), CELL_SIZE // 2)
+        super().draw(screen)
     
-    def drop_pos_of_mine(self, pos) :
+    def drop_pos_of_mine(self, pos):
         self.communication_system.pop(self.communication_system.index(pos))
