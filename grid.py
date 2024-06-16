@@ -41,14 +41,18 @@ class Grid:
             for x in range(self.size):
                 rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
                 if self.revealed[y][x]:
-                    if self.grid[y][x] == -1:  
+                    if self.grid[y][x] == -2:  
                         #pygame.draw.ellipse(screen, RED, rect)
                         screen.blit(self.demi_image, rect)
+
                     else:
                         pygame.draw.rect(screen, WHITE, rect)
                         if self.grid[y][x] > 0:
                             text = font.render(str(self.grid[y][x]), True, WHITE)
                             screen.blit(text, (x * CELL_SIZE + 5, y * CELL_SIZE + 5))
+                
+                elif self.grid[y][x] == -2:
+                    pygame.draw.ellipse(screen, RED, rect)
                 else:
                     pygame.draw.rect(screen, GRAY, rect)
                     if self.flags[y][x]:

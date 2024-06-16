@@ -6,7 +6,7 @@ RED = (255, 0, 0)
 PURPLE = (128, 0, 128)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-ORANGE = (100,150, 55)
+ORANGE = (100,150, 155)
 
 # Définir les dimensions de la grille
 GRID_SIZE = 30

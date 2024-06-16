@@ -24,3 +24,4 @@ class Detecteur(Agent):
             self.notifier_demineurs(demineurs)
     def get_color(self):
         return (100,75,0)  # Exemple de couleur pour le démineur
+

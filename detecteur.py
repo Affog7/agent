@@ -16,10 +16,13 @@ class DetectorAgent:
 
     def detect_mines(self):
         detected_positions = []
-        for y in range(self.grid.size):
-            for x in range(self.grid.size):
-                if self.grid.grid[y][x] == -1 and not self.grid.revealed[y][x]:
-                    detected_positions.append((x, y))
+       
+        if self.grid.grid[self.y][self.x] == -1 and not self.grid.revealed[self.y][self.x]:
+            detected_positions.append((self.x, self.y, False))
+            print(f"position de {self.x}  et {self.y} detectee")
+            self.grid.grid[self.y][self.x] = -2 # marqué la position de -2
+            #self.grid.revealed[self.y][self.x] = True
+        self.grid.verified[self.y][self.x] = True
         return detected_positions
 
     def communicate_mine_positions(self):
@@ -45,3 +48,6 @@ class DetectorAgent:
 
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (self.x * CELL_SIZE + CELL_SIZE // 2, self.y * CELL_SIZE + CELL_SIZE // 2), CELL_SIZE // 2)
+    
+    def drop_pos_of_mine(self, pos) :
+        self.communication_system.pop(self.communication_system.index(pos))
