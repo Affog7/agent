@@ -15,9 +15,12 @@ class Hostage(Agent):
         self.current_target_index = 0  # Index pour suivre la position cible actuelle
         self.last_move_time = time.time()  # Heure du dernier mouvement
         self.move_delay = 0.5  # Délai en secondes entre les mouvements
+        self.grid.revealed[y][x] = True
+        self.grid.verified[y][x] = True
 
+        
     def heuristic(self, a, b):
-        # Fonction heuristique pour A* (distance de Manhattan)
+        # Fonction heuristique pour A*
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
     def a_star_search(self, start, goal):
@@ -109,3 +112,4 @@ class Hostage(Agent):
 
     def isFinal(self):
         return self.current_target_index >= len(self.target_pos) and (self.x, self.y) == self.target_pos[-1]
+        print(f"C'est la fin {self.__qualname__}")

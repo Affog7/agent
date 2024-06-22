@@ -13,7 +13,6 @@ GRID_SIZE = 30  # Taille de la grille (nombre de cellules par côté)
 CELL_SIZE = 20  # Taille d'une cellule en pixels
 MINES_COUNT = 50  # Nombre de mines dans la grille
 
-START_PLACE = (0, 1, 2)  # Positions de départ possibles (indices de cellules)
 
 # États possibles d'une cellule de la grille concernant les mines
 POSITION_MINEE = -1  # La cellule contient une mine

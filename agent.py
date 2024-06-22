@@ -20,6 +20,7 @@ class Agent:
         self.move_count = 0  # Compteur de déplacements pour gérer l'intervalle de mouvement
         self.move_interval = move_interval  # Intervalle de temps entre les déplacements
 
+
     def move(self):
         """
         Méthode à implémenter par les sous-classes pour définir le comportement

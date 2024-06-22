@@ -6,60 +6,85 @@ from grid import Grid
 from Hostage import Hostage
 from demineur import Demineur
 
-# Boucle principale du jeu
+# Initialisation de Pygame
 pygame.init()
+
+# Création de la fenêtre de jeu
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Rescue Mission")
+pygame.display.set_caption("Mission de sauvetage")
+
+# Initialisation de la police pour les textes
 font = pygame.font.SysFont(None, 30)
+
+# Initialisation de l'horloge pour contrôler la vitesse de rafraîchissement
 clock = pygame.time.Clock()
 
+# Création de la grille de jeu avec une taille définie et un nombre de mines
 grid = Grid(GRID_SIZE, MINES_COUNT)
 
-# Liste partagée pour suivre les positions des mines assignées
-assigned_mines = []
-
-# Initialisation des démineurs avec une vision radius de 5 par exemple
+# Initialisation des démineurs avec un rayon de vision de 5
 vision_radius = 5
 
-hostages = [Hostage(0, 0, grid),Hostage(0, 1, grid)]
+# Création d'une liste d'otages à des positions spécifiques sur la grille
+hostages = [Hostage(0, 0, grid), Hostage(int(GRID_SIZE/2),0, grid)]
 
-
+# Création d'une liste de démineurs placés aléatoirement sur la grille
+# Chaque démineur a une position aléatoire, un rayon de vision, et une liste d'otages à sauver
 demineurs = [Demineur(random.randint(0, GRID_SIZE-1), random.randint(0, GRID_SIZE-1), grid, vision_radius, 30, hostages) for _ in range(3)]
 
-detector_agents = [DetectorAgent(random.randint(0, GRID_SIZE-1), random.randint(0, GRID_SIZE-1), grid, demineurs+hostages) for _ in range(3)]
+# Création d'une liste d'agents détecteurs placés aléatoirement sur la grille
+# Chaque détecteur peut détecter les démineurs et les otages
+detector_agents = [DetectorAgent(random.randint(0, GRID_SIZE-1), random.randint(0, GRID_SIZE-1), grid, demineurs + hostages) for _ in range(3)]
 
+# Affectation des démineurs à la grille
 grid.setDemineurs(demineurs)
 
+# Variable pour contrôler la boucle principale du jeu
 running = True
 
+# Boucle principale du jeu
 while running:
+    # Gestion des événements
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+    # Remplissage de l'écran avec une couleur grise
     SCREEN.fill(GRAY)
+
+    # Dessin de la grille sur l'écran
     grid.draw(SCREEN, font)
 
+    # Mise à jour et envoi de messages par les agents détecteurs
     for detector_agent in detector_agents:
         detector_agent.update()
         detector_agent.sendMessage() 
 
+    # Mise à jour de l'état de chaque démineur
     for demineur in demineurs:
         demineur.update()
             
+    # Dessin des agents détecteurs sur l'écran
     for detector_agent in detector_agents:
         detector_agent.draw(SCREEN)
    
+    # Mise à jour de l'état de chaque otage
     for hostage in hostages:
-        hostage.move()
+        hostage.update()
 
+    # Dessin des otages sur l'écran
     for hostage in hostages:
         hostage.draw(SCREEN)
     
+    # Dessin des démineurs sur l'écran
     for demineur in demineurs:
         demineur.draw(SCREEN)
 
+    # Mise à jour de l'affichage
     pygame.display.flip()
+    
+    # Limitation du nombre d'images par seconde à 30
     clock.tick(30)
 
+# Fermeture de Pygame
 pygame.quit()

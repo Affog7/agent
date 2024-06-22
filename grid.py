@@ -19,13 +19,13 @@ class Grid:
         self.flags = [[False for _ in range(size)] for _ in range(size)]  # Statut de drapeau des cellules
         self.load_images()  # Chargement des images nécessaires
         self.demineurs = None  # Initialisation des démineurs à None
-        self.mark_safe_positions()  # Marquer les positions initiales comme sûres
+        self.mark_safe_positions()  # Marquer les positions initiales des agents otages comme sûres
 
     def setDemineurs(self, demineurs):
         """
         Définit les démineurs pour la grille.
 
-        :demineurs: Liste ou ensemble de démineurs
+        demineurs: Liste ou ensemble de démineurs
         """
         self.demineurs = demineurs
 
@@ -37,7 +37,7 @@ class Grid:
         """
         grid = [[0 for _ in range(self.size)] for _ in range(self.size)]  # Initialisation de la grille
         mines = set()  # Ensemble pour stocker les positions des mines
-        safe_positions = set(START_PLACE).union(set(dernieres_coordonnees()))  # Positions sûres (à ne pas minier)
+        safe_positions = dernieres_coordonnees()  # Positions sûres (à ne pas minier)
 
         while len(mines) < self.mines_count:
             x = random.randint(0, self.size - 1)
@@ -74,7 +74,7 @@ class Grid:
                         if self.grid[y][x] > 0:
                             text = font.render(str(self.grid[y][x]), True, WHITE)
                             screen.blit(text, (x * CELL_SIZE + 5, y * CELL_SIZE + 5))
-                elif (x in START_PLACE and y in START_PLACE) or (x, y) in dernieres_coordonnees():
+                elif   (x, y) in dernieres_coordonnees():
                     pygame.draw.rect(screen, BLACK, rect)
                 elif self.grid[y][x] == POSITION_A_DEMINEE:  # Position marquée pour être déminée
                     pygame.draw.ellipse(screen, RED, rect)
@@ -110,15 +110,11 @@ class Grid:
         self.r_image = pygame.image.load("R.png")
         self.r_image = pygame.transform.scale(self.r_image, (CELL_SIZE, CELL_SIZE))
 
+    # del
     def mark_safe_positions(self):
         """
-        Marque les positions initiales comme sûres (révélées et vérifiées).
-        """
-        for x in START_PLACE:
-            for y in START_PLACE:
-                self.revealed[y][x] = True
-                self.verified[y][x] = True
-        
+        Marque les positions initiales des agents otages comme sûres (révélées et vérifiées).
+        """        
         for (x, y) in dernieres_coordonnees():
             self.revealed[y][x] = True
             self.verified[y][x] = True
