@@ -1,27 +1,50 @@
-import pygame
-import random
-from settings import *
+import pygame   
+import random   
+from settings import *   
+from utils import dernieres_coordonnees  
 
 class Grid:
     def __init__(self, size, mines_count):
+        """
+        Initialise la grille avec une taille et un nombre de mines spécifiés.
+
+        :size: Taille de la grille (nombre de cellules par côté)
+        :mines_count: Nombre de mines dans la grille
+        """
         self.size = size
         self.mines_count = mines_count
-        self.grid = self.create_grid()
-        self.revealed = [[False for _ in range(size)] for _ in range(size)]
-        self.verified = [[False for _ in range(size)] for _ in range(size)]
-        self.flags = [[False for _ in range(size)] for _ in range(size)]
-        self.load_images()
-        
+        self.grid = self.create_grid()  # Création de la grille
+        self.revealed = [[False for _ in range(size)] for _ in range(size)]  # Statut de révélation des cellules
+        self.verified = [[False for _ in range(size)] for _ in range(size)]  # Statut de vérification des cellules
+        self.flags = [[False for _ in range(size)] for _ in range(size)]  # Statut de drapeau des cellules
+        self.load_images()  # Chargement des images nécessaires
+        self.demineurs = None  # Initialisation des démineurs à None
+        self.mark_safe_positions()  # Marquer les positions initiales comme sûres
+
+    def setDemineurs(self, demineurs):
+        """
+        Définit les démineurs pour la grille.
+
+        :demineurs: Liste ou ensemble de démineurs
+        """
+        self.demineurs = demineurs
 
     def create_grid(self):
-        grid = [[0 for _ in range(self.size)] for _ in range(self.size)]
-        mines = set()
+        """
+        Crée la grille en plaçant les mines et en calculant le nombre de mines voisines pour chaque cellule.
+
+        :return: La grille créée
+        """
+        grid = [[0 for _ in range(self.size)] for _ in range(self.size)]  # Initialisation de la grille
+        mines = set()  # Ensemble pour stocker les positions des mines
+        safe_positions = set(START_PLACE).union(set(dernieres_coordonnees()))  # Positions sûres (à ne pas minier)
+
         while len(mines) < self.mines_count:
             x = random.randint(0, self.size - 1)
             y = random.randint(0, self.size - 1)
-            if (x, y) not in mines:
+            if (x, y) not in mines and (x, y) not in safe_positions:
                 mines.add((x, y))
-                grid[y][x] = -1
+                grid[y][x] = -1  # Zone minée
 
         for y in range(self.size):
             for x in range(self.size):
@@ -33,39 +56,40 @@ class Grid:
                         nx, ny = x + dx, y + dy
                         if 0 <= nx < self.size and 0 <= ny < self.size and grid[ny][nx] == -1:
                             count += 1
-                grid[y][x] = count
+                grid[y][x] = count  # Nombre de mines voisines
         return grid
 
     def draw(self, screen, font):
+        """
+        Dessine la grille à l'écran.
+        """
         for y in range(self.size):
             for x in range(self.size):
                 rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
                 if self.revealed[y][x]:
-                    if self.grid[y][x] == -2:  
-                        #pygame.draw.ellipse(screen, RED, rect)
+                    if self.grid[y][x] == POSITION_DEMINEE:  # Position déminée
                         screen.blit(self.demi_image, rect)
-
                     else:
                         pygame.draw.rect(screen, WHITE, rect)
                         if self.grid[y][x] > 0:
                             text = font.render(str(self.grid[y][x]), True, WHITE)
                             screen.blit(text, (x * CELL_SIZE + 5, y * CELL_SIZE + 5))
-                
-                elif self.grid[y][x] == -2:
+                elif (x in START_PLACE and y in START_PLACE) or (x, y) in dernieres_coordonnees():
+                    pygame.draw.rect(screen, BLACK, rect)
+                elif self.grid[y][x] == POSITION_A_DEMINEE:  # Position marquée pour être déminée
                     pygame.draw.ellipse(screen, RED, rect)
                 else:
-                    pygame.draw.rect(screen, GRAY, rect)
-                    if self.flags[y][x]:
-                        pygame.draw.rect(screen, BLUE, rect, 2)
-                    elif self.verified[y][x]:
-                        pygame.draw.rect(screen, GREEN, rect, 1)
-                    if self.grid[y][x] == -1:  
-                        #pygame.draw.ellipse(screen, BLACK, rect)
+                    if self.grid[y][x] == POSITION_MINEE:  # Position d'une mine
                         screen.blit(self.r_image, rect)
-                        #screen.blit(pygame.image.load("R.png"), rect)
-                pygame.draw.rect(screen, GRAY, rect, 1)
+                pygame.draw.rect(screen, GRAY, rect, 1)  # Bordure de la cellule
 
     def reveal_cell(self, x, y):
+        """
+        Révèle une cellule et, si elle est vide, révèle également ses voisines.
+
+        :x: Coordonnée x de la cellule
+        :y: Coordonnée y de la cellule
+        """
         if self.revealed[y][x] or self.flags[y][x]:
             return
         self.revealed[y][x] = True
@@ -77,10 +101,24 @@ class Grid:
                     if 0 <= nx < self.size and 0 <= ny < self.size:
                         self.reveal_cell(nx, ny)
 
-
-
     def load_images(self):
-            self.demi_image = pygame.image.load("demi.png")
-            self.demi_image = pygame.transform.scale(self.demi_image, (CELL_SIZE, CELL_SIZE))
-            self.r_image = pygame.image.load("R.png")
-            self.r_image = pygame.transform.scale(self.r_image, (CELL_SIZE, CELL_SIZE))
+        """
+        Charge les images nécessaires pour le jeu et les redimensionne.
+        """
+        self.demi_image = pygame.image.load("demi.png")
+        self.demi_image = pygame.transform.scale(self.demi_image, (CELL_SIZE, CELL_SIZE))
+        self.r_image = pygame.image.load("R.png")
+        self.r_image = pygame.transform.scale(self.r_image, (CELL_SIZE, CELL_SIZE))
+
+    def mark_safe_positions(self):
+        """
+        Marque les positions initiales comme sûres (révélées et vérifiées).
+        """
+        for x in START_PLACE:
+            for y in START_PLACE:
+                self.revealed[y][x] = True
+                self.verified[y][x] = True
+        
+        for (x, y) in dernieres_coordonnees():
+            self.revealed[y][x] = True
+            self.verified[y][x] = True
