@@ -72,11 +72,11 @@ Les otages utilisent l'algorithme A* pour déterminer un chemin sûr, en consid�
 
 L'image fournie montre la simulation du terrain de mines. Les différents éléments représentés sont :
 
-- <img src="image/R.png" alt="Mine"> Points noirs : Mines non détectées
+- <img src="image/R.png" height="15" alt="Mine"> Points noirs : Mines non détectées
 - Points bleus : Démineurs
 - Points verts : Chemin des otages
 - Points rouges : Mines détectées et non désamorcées
-- <img src="image/demi.png" alt="Position safe"> Panneaux jaunes : Mines détectées et désamorcées
+- <img src="image/demi.png" height="15" alt="Position safe"> Panneaux jaunes : Mines détectées et désamorcées
 
 ## Conclusion
 Cette simulation utilise une architecture multi-agent pour modéliser et résoudre le problème de traversée d'un champ de mines en coordonnant des agents avec des rôles spécifiques. Les algorithmes d'IA tels que A* sont utilisés pour la recherche de chemins sûrs, et les communications entre agents permettent de mettre à jour les informations critiques sur le terrain de manière dynamique.
