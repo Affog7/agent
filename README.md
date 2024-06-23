@@ -64,6 +64,7 @@ Les otages utilisent l'algorithme A* pour déterminer un chemin sûr, en consid�
    - Mise à jour les chemins en fonction des changements de terrain.
 
 ## Structure
+```
 Project
     │   
     │───classe
@@ -79,7 +80,7 @@ Project
     │───grid.py
     |    
     └───main.py
-         
+```         
 
 ### Image de simulation
 <img src="image/terrain.png" alt="Terrain miné">
