@@ -1,12 +1,12 @@
 import pygame
 import random
-
 from classe.agent import Agent
 from utils.settings import * 
 
 class Demineur(Agent):
+
     def __init__(self, x, y, grid, vision_radius=5, move_interval=30, agents_otages=None):
-        super().__init__(x, y, grid, GREEN, move_interval)  # Initialisation de la classe parente Agent avec des paramètres spécifiques
+        super().__init__(x, y, grid, GREEN, move_interval) 
         self.isBusy = False  # Indique si le démineur est occupé
         self.target = None  # Cible actuelle du démineur
         self.current_agent = None  # Agent actuel attribué
@@ -16,9 +16,11 @@ class Demineur(Agent):
         self.move_delay = 0  # Délai de mouvement
         self.mine_positions = []  # Liste des positions des mines
 
+
     def receiveMessage(self, mine_positions):
         print(f"moi demineur je suis notifie de : {mine_positions}")
         self.mine_positions.extend(mine_positions)  # Ajoute les positions des mines reçues à la liste
+
 
     def find_mines_in_vision(self):
         mines_in_vision = []  # Liste des mines dans le champ de vision
@@ -29,6 +31,7 @@ class Demineur(Agent):
                     mines_in_vision.append((position, None, dist))  # Ajoute la mine à la liste des mines dans le champ de vision
         return mines_in_vision
 
+
     def find_closest_mine(self):
         mines_in_vision = self.find_mines_in_vision()  # Trouve les mines dans le champ de vision
         if mines_in_vision:
@@ -37,6 +40,7 @@ class Demineur(Agent):
             self.assigned_mines.append((closest_mine[0][0], closest_mine[0][1]))  # Assigne cette mine au démineur
             return closest_mine[0], closest_mine[1]
         return None
+
 
     def find_random_verified_position(self):
         verified_positions = []  # Liste des positions vérifiées
@@ -52,13 +56,14 @@ class Demineur(Agent):
             return random.choice(verified_positions)  # Retourne une position vérifiée aléatoire
         return None
 
+
     def move(self):
-        if self.move_delay > 0:  # Si le délai de mouvement est supérieur à zéro
+        if self.move_delay > 0: 
             self.move_delay -= 1
             return
 
         if self.target:
-            target_x, target_y = self.target[0], self.target[1]  # Utilise la cible actuelle
+            target_x, target_y = self.target[0], self.target[1]  
         else:
             random_position = self.find_random_verified_position()  # Trouve une position vérifiée aléatoire
             if random_position:
@@ -95,6 +100,7 @@ class Demineur(Agent):
 
         self.move_delay = self.move_interval  # Réinitialise le délai de mouvement
 
+
     def is_position_in_radius_of_other_agents(self, x, y):
         for agent in self.grid.demineurs:
             if agent != self:
@@ -102,6 +108,7 @@ class Demineur(Agent):
                 if dist <= agent.vision_radius:  # Si l'autre agent est dans le rayon de vision
                     return True
         return False
+
 
     def find_closest_mineur_to_target(self, target_x, target_y):
         closest_mineur = None
@@ -114,20 +121,24 @@ class Demineur(Agent):
                     closest_distance = dist
         return closest_mineur, closest_distance
 
+
     def change_position(self):
         new_position = self.find_random_verified_position()  # Trouve une position vérifiée aléatoire
         if new_position:
             self.x, self.y = new_position  # Change la position du démineur
 
+
     def notifyOthers(self, pos):
         for agent in self.grid.demineurs:
             agent.update_inbox_me(pos)  # Notifie les autres démineurs de la position de la mine
+
 
     def update_inbox_me(self, pos):
         try:
             self.mine_positions.remove(pos)  # Enlève la position de la mine de la liste
         except Exception:
-            print("pos not found")
+            print("PTT")
+
 
     def reveal_mine(self):
         if self.grid.grid[self.y][self.x] == POSITION_A_DEMINEE:  # Si la position actuelle est une position à déminer
@@ -138,9 +149,10 @@ class Demineur(Agent):
             self.notifyOthers((self.x, self.y, False))
             self.sendMessage()
         elif self.grid.grid[self.y][self.x] == POSITION_MINEE:  # Si la position actuelle est une mine
-            print("morrrt")
+            print("== TTT ==")
         else:
             self.grid.verified[self.y][self.x] = True
+
 
     def update(self):
         if not self.isBusy:  # Si le démineur n'est pas occupé
@@ -150,10 +162,12 @@ class Demineur(Agent):
                 self.isBusy = True
         self.move()  # Effectue un mouvement
 
+
     def draw(self, screen):
         super().draw(screen)  # Dessine le démineur sur l'écran
         pygame.draw.circle(screen, (0, 255, 0, 100), (self.x * CELL_SIZE + CELL_SIZE // 2, self.y * CELL_SIZE + CELL_SIZE // 2), self.vision_radius * CELL_SIZE, 1)  # Dessine le rayon de vision
 
+
     def sendMessage(self):
         for agent in self.agents_otages:
-            agent.receiveMessage((self.x, self.y), type="SAFE")  # Envoie un message aux agents otages pour indiquer que la position est sûre
+            agent.receiveMessage((self.x, self.y), type="SAFE") 

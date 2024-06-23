@@ -68,6 +68,7 @@ Les otages utilisent l'algorithme A* pour déterminer un chemin sûr, en consid�
 
 ### Image de simulation
 <img src="image/terrain.png" alt="Terrain miné">
+<img src="image/terrain2.png" alt="Misson terminée 2">
 <img src="image/Final.png" alt="Misson terminée">
 
 L'image fournie montre la simulation du terrain de mines. Les différents éléments représentés sont :

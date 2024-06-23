@@ -2,6 +2,7 @@
 WHITE = (255, 255, 255)  # Blanc
 BLACK = (0, 0, 0)  # Noir
 GRAY = (200, 200, 200)  # Gris
+LIGHT_GRAY = (0, 100, 100)
 RED = (255, 0, 0)  # Rouge
 PURPLE = (128, 0, 128)  # Violet
 GREEN = (0, 255, 0)  # Vert

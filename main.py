@@ -14,7 +14,7 @@ SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Mission de sauvetage")
 
 # Initialisation de la police pour les textes
-font = pygame.font.SysFont(None, 30)
+font = pygame.font.SysFont(None, 25)
 
 # Initialisation de l'horloge pour contrôler la vitesse de rafraîchissement
 clock = pygame.time.Clock()
@@ -29,11 +29,11 @@ vision_radius = 5
 hostages = [Hostage(0, 0, grid), Hostage(int(GRID_SIZE / 2), 0, grid)]
 
 # Création d'une liste de démineurs placés aléatoirement sur la grille
-# Chaque démineur a une position aléatoire, un rayon de vision, et une liste d'otages à sauver
+# Chaque démineur a une position aléatoire, un rayon de vision, et connait les otages à sauver
 demineurs = [Demineur(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1), grid, vision_radius, 30, hostages) for _ in range(3)]
 
 # Création d'une liste d'agents détecteurs placés aléatoirement sur la grille
-# Chaque détecteur peut détecter les démineurs et les otages
+# Chaque détecteur connait les démineurs et les otagees
 detector_agents = [DetectorAgent(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1), grid, demineurs + hostages) for _ in range(3)]
 
 # Affectation des démineurs à la grille
@@ -42,9 +42,21 @@ grid.setDemineurs(demineurs)
 # Variable pour contrôler la boucle principale du jeu
 running = True
 
-# Fonction pour vérifier si tous les otages ont atteint leur destination
+# Fonction pour vérifier si tous les otages ont atteint la destination finzle
 def check_all_hostages_final():
     return all(hostage.isFinal() for hostage in hostages)
+
+# Affichage  le nombre d'otages sauvés et restants
+def showInfo() :    
+    nb_sauv = sum(1 for hostage in hostages if hostage.isFinal())
+    nb_restant = len(hostages) - nb_sauv
+
+    # Création du texte à afficher
+    info = f"Otages sauvés : {nb_sauv}  |  Otages restants : {nb_restant}"
+    rendu = font.render(info, True, LIGHT_GRAY)
+    text_rect = rendu.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+
+    SCREEN.blit(rendu, text_rect)
 
 # Boucle principale du jeu
 while running:
@@ -54,7 +66,7 @@ while running:
             running = False
 
     # Remplissage de l'écran avec une couleur grise
-    SCREEN.fill(GRAY)
+    SCREEN.fill(GRAY) 
 
     # Dessin de la grille sur l'écran
     grid.draw(SCREEN, font)
@@ -83,6 +95,8 @@ while running:
     # Dessin des démineurs sur l'écran
     for demineur in demineurs:
         demineur.draw(SCREEN)
+
+    showInfo() # pour afficher le nombre de otages sauvés
 
     # Vérification si tous les otages ont atteint leur destination
     if check_all_hostages_final():

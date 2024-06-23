@@ -18,15 +18,10 @@ class Grid:
         self.verified = [[False for _ in range(size)] for _ in range(size)]  # Statut de vérification des cellules
         self.flags = [[False for _ in range(size)] for _ in range(size)]  # Statut de drapeau des cellules
         self.load_images()  # Chargement des images nécessaires
-        self.demineurs = None  # Initialisation des démineurs à None
+        self.demineurs = None  # Initialisation de la liste ds démineurs à None
         self.mark_safe_positions()  # Marquer les positions initiales des agents otages comme sûres
 
-    def setDemineurs(self, demineurs):
-        """
-        Définit les démineurs pour la grille.
-
-        demineurs: Liste ou ensemble de démineurs
-        """
+    def setDemineurs(self, demineurs): # setters pour prendre les autres demineurs
         self.demineurs = demineurs
 
     def create_grid(self):
@@ -37,7 +32,7 @@ class Grid:
         """
         grid = [[0 for _ in range(self.size)] for _ in range(self.size)]  # Initialisation de la grille
         mines = set()  # Ensemble pour stocker les positions des mines
-        safe_positions = dernieres_coordonnees()  # Positions sûres (à ne pas minier)
+        safe_positions = dernieres_coordonnees()  # Positions sûres ==>(à ne pas minier)
 
         while len(mines) < self.mines_count:
             x = random.randint(0, self.size - 1)
