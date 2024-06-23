@@ -169,6 +169,7 @@ class Hostage(Agent):
 ```
 
 ### Image de simulation
+<img  href = "./terrain.png" />
 L'image fournie montre la simulation du terrain de mines. Les différents éléments représentés sont :
 
 - Points jaunes : Mines détectées
