@@ -63,121 +63,20 @@ Les otages utilisent l'algorithme A* pour déterminer un chemin sûr, en consid�
    - Implémentation un algorithme pour la détection et la désactivation des mines par les détecteurs et démineurs.
    - Mise à jour les chemins en fonction des changements de terrain.
 
-## Code fourni
-### Classe Hostage
-La classe Hostage représente les otages qui doivent traverser le champ miné.
-
-```python
-import heapq
-import pygame
-import time
-from agent import Agent
-from settings import BLUE, GRID_SIZE, CELL_SIZE
-from utils import dernieres_coordonnees
-
-class Hostage(Agent):
-    def __init__(self, x, y, grid):
-        super().__init__(x, y, grid, BLUE, 10)
-        self.path = []
-        self.target_pos = dernieres_coordonnees()
-        self.positions_safe = []
-        self.mine_positions = []
-        self.current_target_index = 0
-        self.last_move_time = time.time()
-        self.move_delay = 0.5
-
-    def heuristic(self, a, b):
-        return abs(a[0] - b[0]) + abs(a[1] - b[1])
-
-    def a_star_search(self, start, goal):
-        open_set = []
-        heapq.heappush(open_set, (0, start))
-        came_from = {}
-        g_score = {start: 0}
-        f_score = {start: self.heuristic(start, goal)}
-
-        while open_set:
-            _, current = heapq.heappop(open_set)
-            if current == goal:
-                path = []
-                while current in came_from:
-                    path.append((current[0], current[1], False))
-                    current = came_from[current]
-                path.reverse()
-                return path
-            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                neighbor = (current[0] + dx, current[1] + dy)
-                if 0 <= neighbor[0] < GRID_SIZE and 0 <= neighbor[1] < GRID_SIZE:
-                    if self.grid.verified[neighbor[1]][neighbor[0]] and (neighbor[0], neighbor[1], False) not in self.mine_positions:
-                        tentative_g_score = g_score[current] + 1
-                        if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
-                            came_from[neighbor] = current
-                            g_score[neighbor] = tentative_g_score
-                            f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
-                            heapq.heappush(open_set, (f_score[neighbor], neighbor))
-        return []
-
-    def is_path_safe(self, path):
-        return any(position in self.mine_positions for position in path)
-
-    def move(self):
-        if self.current_target_index >= len(self.target_pos):
-            return
-        start = (self.x, self.y)
-        goal = self.target_pos[self.current_target_index]
-        current_time = time.time()
-        if current_time - self.last_move_time >= self.move_delay:
-            if not self.path:
-                self.path = self.a_star_search(start, goal)
-            if self.path:
-                next_position = self.path.pop(0)
-                if next_position not in self.mine_positions:
-                    self.x, self.y, _ = next_position
-                    if (self.x, self.y) == self.target_pos[self.current_target_index]:
-                        self.current_target_index += 1
-                        self.path = []
-            if self.path and not self.is_path_safe(self.path):
-                self.path = self.a_star_search(start, goal)
-            self.last_move_time = current_time
-
-    def update(self):
-        if not self.isFinal():
-            self.move()
-
-    def draw(self, screen):
-        super().draw(screen)
-        for pos in self.path:
-            pygame.draw.circle(screen, BLUE, (pos[0] * CELL_SIZE + CELL_SIZE // 2, pos[1] * CELL_SIZE + CELL_SIZE // 2), CELL_SIZE // 4)
-
-    def inbox_mine_positions(self, mine_positions):
-        print(f"moi otage je suis notifie du mine non_d: {mine_positions}")
-        self.mine_positions.extend(mine_positions)
-        self.path = []
-
-    def receiveMessage(self, position, type=None):
-        if type == "SAFE":
-            print(f"moi otage je suis notifie du mine d: {position}")
-            if (position[0], position[1], False) in self.mine_positions:
-                self.mine_positions.remove((position[0], position[1], False))
-            self.positions_safe.append(position)
-            self.path = []
-        else:
-            self.inbox_mine_positions(position)
-
-    def isFinal(self):
-        return self.current_target_index >= len(self.target_pos) and (self.x, self.y) == self.target_pos[-1]
-```
+## Structure
+ 
 
 ### Image de simulation
-<img src="terrain.png" alt="Terrain miné">
+<img src="image/terrain.png" alt="Terrain miné">
+<img src="image/Final.png" alt="Misson terminée">
 
 L'image fournie montre la simulation du terrain de mines. Les différents éléments représentés sont :
 
-- Points jaunes : Mines détectées
-- Points verts : Démineurs
-- Points bleus : Chemin des otages
-- Points rouges : Mines non désamorcées
-- Points noirs : Mines désamorcées
+- <img src="image/R.png" alt="Mine"> Points noirs : Mines non détectées
+- Points bleus : Démineurs
+- Points verts : Chemin des otages
+- Points rouges : Mines détectées et non désamorcées
+- <img src="image/demi.png" alt="Position safe"> Panneaux jaunes : Mines détectées et désamorcées
 
 ## Conclusion
 Cette simulation utilise une architecture multi-agent pour modéliser et résoudre le problème de traversée d'un champ de mines en coordonnant des agents avec des rôles spécifiques. Les algorithmes d'IA tels que A* sont utilisés pour la recherche de chemins sûrs, et les communications entre agents permettent de mettre à jour les informations critiques sur le terrain de manière dynamique.

@@ -1,6 +1,6 @@
 import random 
-from agent import Agent  
-from settings import CELL_SIZE, ORANGE, POSITION_A_DEMINEE, POSITION_MINEE  # Importation des paramètres nécessaires
+from classe.agent import Agent  
+from utils.settings import CELL_SIZE, ORANGE, POSITION_A_DEMINEE, POSITION_MINEE  # Importation des paramètres nécessaires
 
 class DetectorAgent(Agent):
     def __init__(self, x, y, grid, agents):

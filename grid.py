@@ -1,7 +1,7 @@
 import pygame   
 import random   
-from settings import *   
-from utils import dernieres_coordonnees  
+from utils.settings import *   
+from utils.utils import dernieres_coordonnees  
 
 class Grid:
     def __init__(self, size, mines_count):
@@ -105,9 +105,9 @@ class Grid:
         """
         Charge les images nécessaires pour le jeu et les redimensionne.
         """
-        self.demi_image = pygame.image.load("demi.png")
+        self.demi_image = pygame.image.load("image/demi.png")
         self.demi_image = pygame.transform.scale(self.demi_image, (CELL_SIZE, CELL_SIZE))
-        self.r_image = pygame.image.load("R.png")
+        self.r_image = pygame.image.load("image/R.png")
         self.r_image = pygame.transform.scale(self.r_image, (CELL_SIZE, CELL_SIZE))
 
     # del

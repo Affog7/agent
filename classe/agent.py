@@ -1,5 +1,5 @@
 import pygame
-from settings import *
+from utils.settings import *
 
 class Agent:
     def __init__(self, x, y, grid, color, move_interval=2):

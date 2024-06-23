@@ -1,9 +1,9 @@
 import heapq
 import pygame
 import time
-from agent import Agent
-from settings import BLUE, GRID_SIZE, CELL_SIZE
-from utils import dernieres_coordonnees
+from classe.agent import Agent
+from utils.settings import BLUE, GRID_SIZE, CELL_SIZE
+from utils.utils import dernieres_coordonnees
 
 class Hostage(Agent):
     def __init__(self, x, y, grid):
@@ -96,13 +96,13 @@ class Hostage(Agent):
             pygame.draw.circle(screen, BLUE, (pos[0] * CELL_SIZE + CELL_SIZE // 2, pos[1] * CELL_SIZE + CELL_SIZE // 2), CELL_SIZE // 4)
 
     def inbox_mine_positions(self, mine_positions):
-        print(f"moi otage je suis notifie du mine non_d: {mine_positions}")
+        print(f"moi otage je suis notifie du mine : {mine_positions}")
         self.mine_positions.extend(mine_positions)
         self.path = []  # Efface le chemin actuel pour recalculer
 
     def receiveMessage(self, position, type=None):
         if type == "SAFE":
-            print(f"moi otage je suis notifie du mine d: {position}")
+            print(f"moi otage je suis notifie du mine désarmoçer: {position}")
             if (position[0], position[1], False) in self.mine_positions:
                 self.mine_positions.remove((position[0], position[1], False))
             self.positions_safe.append(position)
@@ -111,5 +111,6 @@ class Hostage(Agent):
             self.inbox_mine_positions(position)
 
     def isFinal(self):
-        return self.current_target_index >= len(self.target_pos) and (self.x, self.y) == self.target_pos[-1]
-        print(f"C'est la fin {self.__qualname__}")
+       
+        return   (self.x, self.y) == self.target_pos[-1]
+       

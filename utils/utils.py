@@ -1,4 +1,4 @@
-from settings import GRID_SIZE
+from utils.settings import GRID_SIZE
 
 
 def dernieres_coordonnees():

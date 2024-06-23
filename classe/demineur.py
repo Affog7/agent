@@ -1,7 +1,8 @@
 import pygame
 import random
-from agent import Agent
-from settings import *
+
+from classe.agent import Agent
+from utils.settings import * 
 
 class Demineur(Agent):
     def __init__(self, x, y, grid, vision_radius=5, move_interval=30, agents_otages=None):
