@@ -1,6 +1,6 @@
 # PROJET : Simulation d'un Terrain de Mines de Guerre avec une Architecture Multi-Agent
 
-<img src="image/terrain2.png" alt="Mission terminée 2">
+<img src="https://github.com/Affog7/agent/blob/main/image/terrain2.png" alt="Mission terminée 2">
 
 ## Introduction
 Ce projet vise à simuler un terrain de mines de guerre où des agents doivent traverser un champ miné en utilisant des algorithmes d'IA pour détecter et désamorcer des mines, ainsi que pour trouver des chemins sûrs. L'objectif est de coordonner différents types d'agents pour réussir une mission de sauvetage.
@@ -94,16 +94,16 @@ Project
 ```         
 
 ### Images de simulation
-<img src="image/terrain.png" alt="Terrain miné">
+<img src="https://github.com/Affog7/agent/blob/main/image/terrain.png" alt="Terrain miné">
 
-<img src="image/Final.png" alt="Mission terminée">
+<img src="https://github.com/Affog7/agent/blob/main/image/Final.png" alt="Mission terminée">
 
 Les images fournies montrent la simulation du terrain de mines. Les différents éléments représentés sont :
-- <img src="image/R.png" height="15" alt="Mine"> Points noirs : Mines non détectées
+- <img src="https://github.com/Affog7/agent/blob/main/image/R.png" height="15" alt="Mine"> Points noirs : Mines non détectées
 - Points bleus : Démineurs
 - Points verts : Otages
 - Points rouges : Mines détectées et non désamorcées
-- <img src="image/demi.png" height="15" alt="Position safe"> Panneaux jaunes : Mines détectées et désamorcées
+- <img src="https://github.com/Affog7/agent/blob/main/image/demi.png" height="15" alt="Position safe"> Panneaux jaunes : Mines détectées et désamorcées
 
 ## Conclusion
 Cette simulation utilise une architecture multi-agent pour modéliser et résoudre le problème de traversée d'un champ de mines en coordonnant des agents avec des rôles spécifiques. Les algorithmes d'IA tels que A* sont utilisés pour la recherche de chemins sûrs, et les communications entre agents permettent de mettre à jour les informations critiques sur le terrain de manière dynamique.
