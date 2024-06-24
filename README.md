@@ -107,3 +107,6 @@ Les images fournies montrent la simulation du terrain de mines. Les différents 
 
 ## Conclusion
 Cette simulation utilise une architecture multi-agent pour modéliser et résoudre le problème de traversée d'un champ de mines en coordonnant des agents avec des rôles spécifiques. Les algorithmes d'IA tels que A* sont utilisés pour la recherche de chemins sûrs, et les communications entre agents permettent de mettre à jour les informations critiques sur le terrain de manière dynamique.
+
+## A FAIRE 
+ <img src="https://github.com/Affog7/agent/blob/main/image/demi.png" height="15" alt="Position safe">  Définir une stratégie pour les agents
